@@ -1,0 +1,20 @@
+version: 0.2
+phases:
+  install:
+    java: coretto11
+  pre_build:
+    commands: 
+      - echo In the pre_build phase...
+      - mvn test
+  build:
+    commands:
+    - echo "Entered build phase"
+    - mvn package
+  post_build:
+    commands:
+    - echo "Entered the post-build phase"
+    - ls
+artifacts:
+  files:
+    - target/*.jar
+  discard-paths: yes
