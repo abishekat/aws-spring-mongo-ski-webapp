@@ -1,4 +1,4 @@
-package cu.assignment.utils;
+package cu.ski.utils;
 
 import java.util.concurrent.Executor;
 
@@ -11,16 +11,16 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import cu.assignment.repository.AudioRepository;
+import cu.ski.repository.SkiRepository;
 
 @SpringBootApplication
-@EnableMongoRepositories("cu.assignment.repository")
-@ComponentScan("cu.assignment.*")
+@EnableMongoRepositories("cu.ski.repository")
+@ComponentScan("cu.ski.*")
 @EnableAsync
 public class ServerlessSpringApplication {
 
 	@Autowired
-	AudioRepository audioRepository;
+	SkiRepository skiRepository;
 
 	@Bean("threadPoolTaskExecutor")
 	public Executor threadPoolTaskExecutor() {

@@ -1,4 +1,4 @@
-package cu.assignment.utils;
+package cu.ski.utils;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

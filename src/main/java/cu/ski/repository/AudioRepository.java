@@ -1,4 +1,4 @@
-package cu.assignment.repository;
+package cu.ski.repository;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import cu.assignment.model.AudioItem;
+import cu.ski.model.AudioItem;
 
 @Repository
 public interface AudioRepository extends MongoRepository<AudioItem, String> {

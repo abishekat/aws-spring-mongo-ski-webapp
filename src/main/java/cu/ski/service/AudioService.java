@@ -1,12 +1,12 @@
-package cu.assignment.service;
+package cu.ski.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cu.assignment.model.AudioItem;
-import cu.assignment.repository.AudioRepository;
+import cu.ski.model.AudioItem;
+import cu.ski.repository.AudioRepository;
 
 @Service
 public class AudioService {

@@ -1,4 +1,4 @@
-package cu.assignment.controller;
+package cu.ski.controller;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cu.assignment.model.AudioItem;
-import cu.assignment.service.AudioService;
+import cu.ski.model.AudioItem;
+import cu.ski.service.AudioService;
 
 @RestController
 @RequestMapping("/api/audio")
