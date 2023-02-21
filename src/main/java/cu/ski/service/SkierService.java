@@ -1,12 +1,38 @@
 package cu.ski.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import cu.ski.model.Resort;
+import cu.ski.model.Skier;
 import cu.ski.repository.SkiRepository;
 
+@Service
 public class SkierService {
 
 	@Autowired
 	SkiRepository skiRepository;
-	
+
+	public List<Resort> getAllResorts() {
+		return skiRepository.findAllResorts();
+	}
+
+	public Skier createResort(Skier skier) {
+		return skiRepository.save(skier);
+	}
+
+	public List<Skier> findByResortIDAndSeasonIDAndDayID(String resortID, String seasonID, String dayID) {
+		return skiRepository.findByResortIDAndSeasonIDAndDayID(resortID, seasonID, dayID);
+	}
+
+	public List<Skier> findByResortID(String resortID) {
+		return skiRepository.findByResortID(resortID);
+	}
+
+	public Skier createSeason(Skier skier) {
+		return skiRepository.save(skier);
+	}
+
 }

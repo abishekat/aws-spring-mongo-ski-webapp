@@ -15,6 +15,11 @@ public class Resort {
 //	@Column(name="resortid")
 	private int resortId;
 
+	@Override
+	public String toString() {
+		return "Resort [resortName=" + resortName + ", resortId=" + resortId + "]";
+	}
+
 	public String getResortName() {
 		return resortName;
 	}
