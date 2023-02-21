@@ -85,10 +85,91 @@ public class SkiController {
 	public Skier createSeason(@RequestBody String request, @PathVariable String resortID) {
 
 		JSONObject jsonObject = new JSONObject(request);
-		String year = jsonObject.getString("year").toString();
-		Skier skier = new Skier(resortID, year);
+		String seasonID = jsonObject.getString("year").toString();
+		Skier skier = new Skier(resortID, seasonID);
 
 		return skierService.createSeason(skier);
+	}
+
+	@PostMapping("/skiers/{resortID}/seasons/{seasonID}/days/{dayID}/skiers/{skierID}")
+	public Skier newLiftRide(@RequestBody String request, @PathVariable String resortID, @PathVariable String seasonID,
+			@PathVariable String dayID, @PathVariable String skierID) {
+
+		JSONObject jsonObject = new JSONObject(request);
+		String time = jsonObject.get("time").toString();
+		String liftID = jsonObject.get("liftID").toString();
+		Skier skier = new Skier(resortID, skierID, liftID, dayID, seasonID, time);
+
+		return skierService.newLiftRide(skier);
+	}
+
+	@GetMapping("/skiers/{resortID}/seasons/{seasonID}/days/{dayID}/skiers/{skierID}")
+	public String getSkiDayVertical(@PathVariable String resortID, @PathVariable String seasonID,
+			@PathVariable String dayID, @PathVariable String skierID) {
+		JSONArray jsonArray = new JSONArray(skierService.getSkiDayVertical(resortID, seasonID, dayID, skierID));
+		Long id = (long) 0;
+		for (int i = 0; i < jsonArray.length(); i++) {
+			JSONObject jsonObject = jsonArray.getJSONObject(i);
+			if (jsonObject.has("vertical")) {
+				id = Long.parseLong(jsonObject.get("vertical").toString());
+				id += id;
+			}
+		}
+		return id.toString();
+	}
+
+	@GetMapping("/skiers/{skierID}/vertical")
+	public String getSkierVerticalForSeason(@PathVariable String skierID) {
+		JSONArray jsonArray = new JSONArray(skierService.getSkierVerticalForSeason(skierID));
+
+		JSONObject output = new JSONObject();
+
+		JSONArray resortGroups = new JSONArray();
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			JSONObject object = jsonArray.getJSONObject(i);
+			String resortID = object.getString("resortID");
+			int vertical = object.optInt("vertical", 0);
+			JSONObject seasonIDTotalVertical = new JSONObject();
+			boolean found = false;
+			for (int j = 0; j < resortGroups.length(); j++) {
+				JSONObject resortObject = resortGroups.getJSONObject(j);
+				if (resortObject.getString("resortID").equals(resortID)) {
+					JSONArray seasonIDTotalVerticalArray = resortObject.getJSONArray("seasonIDTotalVertical");
+					boolean foundSeasonID = false;
+					for (int k = 0; k < seasonIDTotalVerticalArray.length(); k++) {
+						JSONObject totalVerticalObject = seasonIDTotalVerticalArray.getJSONObject(k);
+						if (totalVerticalObject.getString("seasonID").equals(object.getString("seasonID"))) {
+							int total = totalVerticalObject.getInt("totalVertical") + vertical;
+							totalVerticalObject.put("totalVertical", total);
+							foundSeasonID = true;
+							break;
+						}
+					}
+					if (!foundSeasonID) {
+						seasonIDTotalVertical.put("seasonID", object.getString("seasonID"));
+						seasonIDTotalVertical.put("totalVertical", vertical);
+						seasonIDTotalVerticalArray.put(seasonIDTotalVertical);
+					}
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				JSONObject newResortObject = new JSONObject();
+				newResortObject.put("resortID", resortID);
+				JSONArray seasonIDTotalVerticalArray = new JSONArray();
+				seasonIDTotalVertical.put("seasonID", object.getString("seasonID"));
+				seasonIDTotalVertical.put("totalVertical", vertical);
+				seasonIDTotalVerticalArray.put(seasonIDTotalVertical);
+				newResortObject.put("seasonIDTotalVertical", seasonIDTotalVerticalArray);
+				resortGroups.put(newResortObject);
+			}
+		}
+
+		output.put("resorts", resortGroups);
+
+		return output.toString();
 	}
 
 }

@@ -2,6 +2,7 @@ package cu.ski.service;
 
 import java.util.List;
 
+import org.json.JSONTokener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,18 @@ public class SkierService {
 
 	public Skier createSeason(Skier skier) {
 		return skiRepository.save(skier);
+	}
+
+	public Skier newLiftRide(Skier skier) {
+		return skiRepository.save(skier);
+	}
+
+	public List<Skier> getSkiDayVertical(String resortID, String seasonID, String dayID, String skierID) {
+		return skiRepository.findByResortIDAndSeasonIDAndDayIDAndSkierID(resortID, seasonID, dayID, skierID);
+	}
+
+	public List<Skier> getSkierVerticalForSeason(String skierID) {
+		return skiRepository.findByskierID(skierID);
 	}
 
 }

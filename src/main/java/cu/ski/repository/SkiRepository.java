@@ -18,4 +18,9 @@ public interface SkiRepository extends MongoRepository<Skier, String> {
 
 	List<Skier> findByResortID(String resortID);
 
+	List<Skier> findByResortIDAndSeasonIDAndDayIDAndSkierID(String resortID, String seasonID, String dayID,
+			String skierID);
+
+	List<Skier> findByskierID(String skierID);
+
 }
