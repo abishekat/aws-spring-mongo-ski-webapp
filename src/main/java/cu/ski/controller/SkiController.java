@@ -1,15 +1,19 @@
 package cu.ski.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.StringOperators.IndexOfBytes.SubstringBuilder;
-import org.springframework.util.StringUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -170,6 +174,58 @@ public class SkiController {
 		output.put("resorts", resortGroups);
 
 		return output.toString();
+	}
+
+	@GetMapping("/statistics")
+	public String performCurl() {
+//		http://localhost:8080/actuator/metrics/http.server.requests?tag=uri:/api/ski/resorts
+		String curlCommand = "curl http://localhost:8080/actuator/metrics/http.server.requests?tag=uri:/api/ski/resorts";
+
+		try {
+			Process process = new ProcessBuilder(curlCommand.split(" ")).start();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			String obj = reader.lines().collect(Collectors.joining("\n"));
+			process.waitFor();
+			if (obj != null) {
+				JSONObject jsonObj = new JSONObject(obj);
+
+				JSONArray jsonArray = new JSONArray(jsonObj.get("measurements").toString());
+
+				int count = 0;
+				double totalTime = 0;
+				double max = 0;
+
+				for (int i = 0; i < jsonArray.length(); i++) {
+					JSONObject jsonObject = jsonArray.getJSONObject(i);
+					String statistic = jsonObject.getString("statistic");
+					double value = jsonObject.getDouble("value");
+
+					if (statistic.equals("COUNT")) {
+						count = (int) value;
+					} else if (statistic.equals("TOTAL_TIME")) {
+						totalTime = value;
+					} else if (statistic.equals("MAX")) {
+						max = value;
+					}
+				}
+
+				JSONObject output = new JSONObject();
+				output.put("URL", "/resorts");
+				output.put("operation", "GET");
+				output.put("count", count);
+				output.put("totaltime", totalTime);
+				output.put("max", max);
+				JSONArray outputArray = new JSONArray();
+				outputArray.put(output);
+				JSONObject newOutputObj = new JSONObject();
+				newOutputObj.put("endpointStats", outputArray);
+				return newOutputObj.toString();
+			}
+			return "null";
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+			return "Error occurred";
+		}
 	}
 
 }
