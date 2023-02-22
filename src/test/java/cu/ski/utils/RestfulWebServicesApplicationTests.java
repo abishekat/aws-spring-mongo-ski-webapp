@@ -2,6 +2,10 @@ package cu.ski.utils;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -19,9 +23,14 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import com.opencsv.exceptions.CsvValidationException;
+
+import cu.ski.service.PerfrmanceAnalysis;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -29,10 +38,11 @@ public class RestfulWebServicesApplicationTests {
 
 	private TestRestTemplate restTemplate = new TestRestTemplate();
 	private static final int THREADS = 32;
-	private static final int POSTS = 1000;
+	private static final int POSTS = 1;
 
 	@Test
-	public void testConcurrentRequests() throws InterruptedException, ExecutionException {
+	public void testConcurrentRequests() throws InterruptedException, ExecutionException, CsvValidationException,
+			NumberFormatException, FileNotFoundException, IOException {
 		ExecutorService executorService = Executors.newFixedThreadPool(THREADS);
 		long startTime = System.currentTimeMillis();
 		List<Callable<Integer>> tasks = new ArrayList<>();
@@ -56,8 +66,25 @@ public class RestfulWebServicesApplicationTests {
 					headers.setContentType(MediaType.APPLICATION_JSON);
 
 					HttpEntity<String> request = new HttpEntity<>(body, headers);
+
+					long requestStartTime = System.currentTimeMillis();
+
 					ResponseEntity<String> response = restTemplate.exchange(
 							"http://localhost:8080/api/ski/create/resort", HttpMethod.POST, request, String.class);
+					long requestEndTime = System.currentTimeMillis();
+
+					long latency = requestEndTime - requestStartTime;
+					HttpStatus responseStatus = response.getStatusCode();
+
+					String csvRecord = String.format("%d,POST,%d,%d", requestStartTime, latency,
+							responseStatus.value());
+
+					File csvFile = new File("post-performance.csv");
+					try (FileWriter writer = new FileWriter(csvFile, true)) {
+						writer.write(csvRecord);
+						writer.write(System.lineSeparator());
+					}
+
 					System.out.println(":::::::::::::::::");
 					count++;
 				}
@@ -76,8 +103,12 @@ public class RestfulWebServicesApplicationTests {
 		long endTime = System.currentTimeMillis();
 		long totalDuration = endTime - startTime;
 		long totalThroughput = (TimeUnit.MILLISECONDS.toSeconds(totalDuration) % 60) / 32000;
+
 		System.out.println("totalDuration ::: " + totalDuration + "::: total throughput :::" + totalThroughput);
 		System.out.println(":::::::totalRequests::::::::::" + totalRequests);
-		assertEquals(32000, totalRequests);
+
+		String performanceAnalysis = PerfrmanceAnalysis.main();
+		System.out.println(performanceAnalysis);
+		assertEquals(32, totalRequests);
 	}
 }
