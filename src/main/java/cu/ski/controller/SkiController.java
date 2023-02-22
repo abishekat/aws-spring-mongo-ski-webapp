@@ -16,6 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +41,7 @@ public class SkiController {
 	 * Get a list of ski resorts in the database
 	 */
 	@GetMapping("/resorts")
+	@Retryable(value = { ResponseStatusException.class }, maxAttempts = 5, backoff = @Backoff(delay = 500))
 	public List<Resort> getAllResorts() {
 		try {
 			List<Resort> resorts = skierService.getAllResorts();
@@ -56,6 +59,7 @@ public class SkiController {
 	 * Create a skier in the database
 	 */
 	@PostMapping("/create")
+	@Retryable(value = { ResponseStatusException.class }, maxAttempts = 5, backoff = @Backoff(delay = 500))
 	public Skier createResort(@RequestBody Skier skier) {
 		Skier skiObject;
 		try {
@@ -75,6 +79,7 @@ public class SkiController {
 	 * Get number of unique skiers at resort/season/day
 	 */
 	@GetMapping("/resorts/{resortID}/seasons/{seasonID}/day/{dayID}/skiers")
+	@Retryable(value = { ResponseStatusException.class }, maxAttempts = 5, backoff = @Backoff(delay = 500))
 	public String findByResortIDAndSeasonIDAndDayID(@PathVariable String resortID, @PathVariable String seasonID,
 			@PathVariable String dayID) {
 
@@ -109,6 +114,7 @@ public class SkiController {
 	 * Get a list of seasons for the specified resort
 	 */
 	@GetMapping("/resorts/{resortID}/seasons")
+	@Retryable(value = { ResponseStatusException.class }, maxAttempts = 5, backoff = @Backoff(delay = 500))
 	public String findByResortID(@PathVariable String resortID) {
 
 		if (resortID == null || resortID.isEmpty()) {
@@ -149,6 +155,7 @@ public class SkiController {
 	 * Add a new season for a resort
 	 */
 	@PostMapping("/resorts/{resortID}/seasons")
+	@Retryable(value = { ResponseStatusException.class }, maxAttempts = 5, backoff = @Backoff(delay = 500))
 	public Skier createSeason(@RequestBody String request, @PathVariable String resortID) {
 		if (resortID == null || resortID.isEmpty()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid path parameter");
@@ -175,6 +182,7 @@ public class SkiController {
 	private static ConcurrentLinkedQueue<Skier> eventQueue = new ConcurrentLinkedQueue<>();
 
 	@PostMapping("/skiers/{resortID}/seasons/{seasonID}/days/{dayID}/skiers/{skierID}")
+	@Retryable(value = { ResponseStatusException.class }, maxAttempts = 5, backoff = @Backoff(delay = 500))
 	public Skier newLiftRide(@RequestBody String request, @PathVariable String resortID, @PathVariable String seasonID,
 			@PathVariable String dayID, @PathVariable String skierID) {
 
@@ -217,6 +225,7 @@ public class SkiController {
 	 * Get ski day vertical for a skier
 	 */
 	@GetMapping("/skiers/{resortID}/seasons/{seasonID}/days/{dayID}/skiers/{skierID}")
+	@Retryable(value = { ResponseStatusException.class }, maxAttempts = 5, backoff = @Backoff(delay = 500))
 	public String getSkiDayVertical(@PathVariable String resortID, @PathVariable String seasonID,
 			@PathVariable String dayID, @PathVariable String skierID) {
 
@@ -247,6 +256,7 @@ public class SkiController {
 	 * resort
 	 */
 	@GetMapping("/skiers/{skierID}/vertical")
+	@Retryable(value = { ResponseStatusException.class }, maxAttempts = 5, backoff = @Backoff(delay = 500))
 	public String getSkierVerticalForSeason(@PathVariable String skierID) {
 
 		if (skierID == null || skierID.isEmpty()) {
@@ -315,6 +325,7 @@ public class SkiController {
 	 * get the metrics.
 	 */
 	@GetMapping("/statistics")
+	@Retryable(value = { ResponseStatusException.class }, maxAttempts = 5, backoff = @Backoff(delay = 500))
 	public String performCurl() {
 //		http://localhost:8080/actuator/metrics/http.server.requests?tag=uri:/api/ski/resorts
 		String curlCommand = "curl http://localhost:8080/actuator/metrics/http.server.requests?tag=uri:/api/ski/resorts";
