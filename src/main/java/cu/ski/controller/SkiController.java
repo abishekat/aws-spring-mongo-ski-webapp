@@ -67,8 +67,10 @@ public class SkiController {
 		Set<String> seasonIDSet = new HashSet<>();
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
-			String id = jsonObject.getString("seasonID");
-			seasonID.add(id);
+			if (jsonObject.has("seasonID")) {
+				String id = jsonObject.getString("seasonID");
+				seasonID.add(id);
+			}
 		}
 		for (String id : seasonID) {
 			seasonIDSet.add(id);
