@@ -22,6 +22,9 @@ public class ServerlessSpringApplication {
 	@Autowired
 	SkiRepository skiRepository;
 
+	/*
+	 * Multi-threading operation with pool size as 4
+	 */
 	@Bean("threadPoolTaskExecutor")
 	public Executor threadPoolTaskExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();

@@ -40,6 +40,17 @@ public class RestfulWebServicesApplicationTests {
 	private static final int THREADS = 32;
 	private static final int POSTS = 1;
 
+	/*
+	 * 32 Threads * 1000 POSTS = 32000 REQUESTS; ExecutorService for mult-threading
+	 * 1. skierID - between 1 and 100000 
+	 * 2. resortID - between 1 and 10 
+	 * 3. liftID - between 1 and 40 
+	 * 4. seasonID - 2022 
+	 * 5. dayID - 1 
+	 * 6. time - between 1 and 360
+	 * performanceAnalysis = PerfrmanceAnalysis.main(); through csv reader dependency
+	 * 
+	 */
 	@Test
 	public void testConcurrentRequests() throws InterruptedException, ExecutionException, CsvValidationException,
 			NumberFormatException, FileNotFoundException, IOException {

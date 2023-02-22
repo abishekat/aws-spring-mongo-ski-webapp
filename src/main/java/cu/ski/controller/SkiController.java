@@ -35,6 +35,9 @@ public class SkiController {
 	@Autowired
 	SkierService skierService;
 
+	/*
+	 * Get a list of ski resorts in the database
+	 */
 	@GetMapping("/resorts")
 	public List<Resort> getAllResorts() {
 		try {
@@ -49,7 +52,10 @@ public class SkiController {
 		}
 	}
 
-	@PostMapping("/create/resort")
+	/*
+	 * Create a skier in the database
+	 */
+	@PostMapping("/create")
 	public Skier createResort(@RequestBody Skier skier) {
 		Skier skiObject;
 		try {
@@ -65,6 +71,9 @@ public class SkiController {
 		return skiObject;
 	}
 
+	/*
+	 * Get number of unique skiers at resort/season/day
+	 */
 	@GetMapping("/resorts/{resortID}/seasons/{seasonID}/day/{dayID}/skiers")
 	public String findByResortIDAndSeasonIDAndDayID(@PathVariable String resortID, @PathVariable String seasonID,
 			@PathVariable String dayID) {
@@ -96,6 +105,9 @@ public class SkiController {
 		}
 	}
 
+	/*
+	 * Get a list of seasons for the specified resort
+	 */
 	@GetMapping("/resorts/{resortID}/seasons")
 	public String findByResortID(@PathVariable String resortID) {
 
@@ -133,6 +145,9 @@ public class SkiController {
 		}
 	}
 
+	/*
+	 * Add a new season for a resort
+	 */
 	@PostMapping("/resorts/{resortID}/seasons")
 	public Skier createSeason(@RequestBody String request, @PathVariable String resortID) {
 		if (resortID == null || resortID.isEmpty()) {
@@ -151,6 +166,12 @@ public class SkiController {
 		}
 	}
 
+	/*
+	 * Create a new lift ride for the skier
+	 * 
+	 * Uses ConcurrentLinkedQueue for generated in a single dedicated thread and be
+	 * made available to the threads that make API calls.
+	 */
 	private static ConcurrentLinkedQueue<Skier> eventQueue = new ConcurrentLinkedQueue<>();
 
 	@PostMapping("/skiers/{resortID}/seasons/{seasonID}/days/{dayID}/skiers/{skierID}")
@@ -175,6 +196,9 @@ public class SkiController {
 		}
 	}
 
+	/*
+	 * Polls the eventQueue : checks and sends event and decrements its index
+	 */
 	private final Thread eventThread = new Thread(() -> {
 		while (true) {
 			Skier event = eventQueue.poll();
@@ -189,6 +213,9 @@ public class SkiController {
 		}
 	});
 
+	/*
+	 * Get ski day vertical for a skier
+	 */
 	@GetMapping("/skiers/{resortID}/seasons/{seasonID}/days/{dayID}/skiers/{skierID}")
 	public String getSkiDayVertical(@PathVariable String resortID, @PathVariable String seasonID,
 			@PathVariable String dayID, @PathVariable String skierID) {
@@ -215,6 +242,10 @@ public class SkiController {
 		}
 	}
 
+	/*
+	 * Get the total vertical for the skier for specified seasons at the specified
+	 * resort
+	 */
 	@GetMapping("/skiers/{skierID}/vertical")
 	public String getSkierVerticalForSeason(@PathVariable String skierID) {
 
@@ -279,6 +310,10 @@ public class SkiController {
 		}
 	}
 
+	/*
+	 * Get the API performance statistics: uses sprig-boot-actuator dependency to
+	 * get the metrics.
+	 */
 	@GetMapping("/statistics")
 	public String performCurl() {
 //		http://localhost:8080/actuator/metrics/http.server.requests?tag=uri:/api/ski/resorts
@@ -326,6 +361,9 @@ public class SkiController {
 		}
 	}
 
+	/*
+	 * To start the thread: as init() to poll eventQueue.
+	 */
 	@PostConstruct
 	public void init() {
 		eventThread.start();

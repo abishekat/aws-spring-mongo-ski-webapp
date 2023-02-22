@@ -13,7 +13,10 @@ import com.opencsv.exceptions.CsvValidationException;
 import cu.ski.model.LatencyRecord;
 
 public class PerfrmanceAnalysis {
-
+	/*
+	 * Measures the performance of the GET and POST form the CSV generated from test
+	 * cases.
+	 */
 	public static String main()
 			throws FileNotFoundException, IOException, CsvValidationException, NumberFormatException {
 		List<LatencyRecord> latencyRecords = new ArrayList<>();
@@ -54,7 +57,6 @@ public class PerfrmanceAnalysis {
 		return list.get(middle);
 	}
 
-	// Helper method to calculate the nth percentile of a list of longs
 	private static long getPercentile(List<Long> list, double percentile) {
 		Collections.sort(list);
 		int index = (int) Math.ceil(percentile * list.size()) - 1;
