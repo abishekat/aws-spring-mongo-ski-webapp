@@ -38,7 +38,7 @@ public class RestfulWebServicesApplicationTests {
 
 	private TestRestTemplate restTemplate = new TestRestTemplate();
 	private static final int THREADS = 32;
-	private static final int POSTS = 1;
+	private static final int POSTS = 1000;
 
 	/*
 	 * 32 Threads * 1000 POSTS = 32000 REQUESTS; ExecutorService for mult-threading
@@ -117,7 +117,7 @@ public class RestfulWebServicesApplicationTests {
 
 		String performanceAnalysis = PerfrmanceAnalysis.main();
 		System.out.println(performanceAnalysis);
-		assertEquals(32, totalRequests);
+		assertEquals(32000, totalRequests);
 	}
 
 	/*
