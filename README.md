@@ -112,7 +112,10 @@ OpenAPI YAML is in src/main/resources/openapi-def.yaml
 ![](src/main/resources/images/cicd_pipeline.png)
 
 
-#### Project Structure
+#### Resort Statics
+   ```shell
+   Should send many get request "/resort" before sending "/statistics"
+   ```
 ![](src/main/resources/images/statistcs.png)
 
 ## Other file
