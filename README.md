@@ -80,8 +80,11 @@ OpenAPI YAML is in src/main/resources/openapi-def.yaml
 
 ## RESULTS
 
-#### Performance Analysis
+#### Performance Analysis with multithreading
 ![](src/main/resources/images/performance_analysis.png)
+
+#### Performance Analysis without multithreading
+![](src/main/resources/images/performance_analysis_part_1.png)
 
 #### Get: Ski resorts && Domain Configured
 ![](src/main/resources/images/domain_configuration.png)
