@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.json.JSONObject;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -13,6 +16,12 @@ import com.opencsv.exceptions.CsvValidationException;
 import cu.ski.model.LatencyRecord;
 
 public class PerfrmanceAnalysis {
+
+//	public static void main(String[] args)
+//			throws CsvValidationException, NumberFormatException, FileNotFoundException, IOException {
+//		main();
+//	}
+
 	/*
 	 * Measures the performance of the GET and POST form the CSV generated from test
 	 * cases.
@@ -43,12 +52,19 @@ public class PerfrmanceAnalysis {
 		long median = getMedian(latencies);
 		long p99 = getPercentile(latencies, 0.99);
 
-		long totalDuration = latencyRecords.get(latencyRecords.size() - 1).getStartTime()
-				- latencyRecords.get(0).getStartTime();
+		long totalDuration = TimeUnit.MILLISECONDS.toSeconds(
+				latencyRecords.get(latencyRecords.size() - 1).getStartTime() - latencyRecords.get(0).getStartTime());
 		double throughput = (double) latencyRecords.size() / (double) totalDuration;
 
-		return "Mean-" + mean + " ::: median- " + median + "::: throughput- " + throughput + "::: p99- " + p99
-				+ "::: min " + min + "::: max- " + max;
+		JSONObject stats = new JSONObject();
+		stats.put("mean", mean);
+		stats.put("median", median);
+		stats.put("throughput", throughput);
+		stats.put("p99", p99);
+		stats.put("min", min);
+		stats.put("max", max);
+		return stats.toString();
+
 	}
 
 	private static long getMedian(List<Long> list) {

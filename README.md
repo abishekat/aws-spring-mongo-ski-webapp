@@ -80,17 +80,17 @@ OpenAPI YAML is in src/main/resources/openapi-def.yaml
 
 ## RESULTS
 
+#### Performance Analysis
+![](src/main/resources/images/performance_analysis.png)
+
 #### Get: Ski resorts && Domain Configured
 ![](src/main/resources/images/domain_configuration.png)
-
-#### Post: Create ski activity
-![](src/main/resources/images/localhost client.png)
 
 #### Get: number of unique skiers at the resort/season/day
 ![](src/main/resources/images/num_ski.png)
 
 ####  Get:  a list of seasons for the specified resort.
-![](src/main/resources/images/list_season-sold.png)
+![](src/main/resources/images/list_season.png)
 
 ####  Post: Add a new season for a resort.
 ![](src/main/resources/images/new_season.png)
@@ -105,7 +105,7 @@ OpenAPI YAML is in src/main/resources/openapi-def.yaml
 ![](src/main/resources/images/tot_vertical.png)
 
 ####  Get: Ski statistics
-![](src/main/resources/images/after-post-copies-sold.png)
+![](src/main/resources/images/statistcs.png)
 
 
 #### CI-CD Pipeline
@@ -113,7 +113,7 @@ OpenAPI YAML is in src/main/resources/openapi-def.yaml
 
 
 #### Project Structure
-![](src/main/resources/images/statistcs.png)
+![](src/main/resources/images/project-structure.png)
 
 ## Other file
 
