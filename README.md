@@ -86,6 +86,12 @@ OpenAPI YAML is in src/main/resources/openapi-def.yaml
 #### Get: Ski resorts && Domain Configured
 ![](src/main/resources/images/domain_configuration.png)
 
+####  Project Structure
+![](src/main/resources/images/project-structure.png)
+
+#### CI-CD Pipeline
+![](src/main/resources/images/cicd_pipeline.png)
+
 #### Get: number of unique skiers at the resort/season/day
 ![](src/main/resources/images/num_ski.png)
 
@@ -104,16 +110,11 @@ OpenAPI YAML is in src/main/resources/openapi-def.yaml
 ####  Get: The total vertical for the skier for specified seasons at the specified resort. 
 ![](src/main/resources/images/tot_vertical.png)
 
-####  Get: Ski statistics
+#### Resort Statics
+   ```shell
+   Should send many get request "/resort" before sending "/statistics"
+   ```
 ![](src/main/resources/images/statistcs.png)
-
-
-#### CI-CD Pipeline
-![](src/main/resources/images/cicd_pipeline.png)
-
-
-#### Project Structure
-![](src/main/resources/images/project-structure.png)
 
 ## Other file
 
