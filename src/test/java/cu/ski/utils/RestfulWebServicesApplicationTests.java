@@ -14,7 +14,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +39,7 @@ public class RestfulWebServicesApplicationTests {
 	private static final int THREADS = 32;
 	private static final int POSTS = 1000;
 
-	/*
+	/* Client PART-2
 	 * 32 Threads * 1000 POSTS = 32000 REQUESTS; ExecutorService for mult-threading
 	 * 1. skierID - between 1 and 100000 2. resortID - between 1 and 10 3. liftID -
 	 * between 1 and 40 4. seasonID - 2022 5. dayID - 1 6. time - between 1 and 360
@@ -76,8 +75,8 @@ public class RestfulWebServicesApplicationTests {
 
 					long requestStartTime = System.currentTimeMillis();
 
-					ResponseEntity<String> response = restTemplate.exchange(
-							"http://localhost:8080/api/ski/create", HttpMethod.POST, request, String.class);
+					ResponseEntity<String> response = restTemplate.exchange("http://localhost:8080/api/ski/create",
+							HttpMethod.POST, request, String.class);
 					long requestEndTime = System.currentTimeMillis();
 
 					long latency = requestEndTime - requestStartTime;
@@ -118,13 +117,53 @@ public class RestfulWebServicesApplicationTests {
 		assertEquals(32000, 32000);
 	}
 
-	/*
+	/* Client PART-1
 	 * for testing client remove @test annotation of basicTest() and add it to
 	 * testConcurrentRequests() For Jar generation, without build getting failed
+	 * uncomment @test to run the part 1 client and comment @test in part 2
 	 */
 
-	@Test
-	public void basicTest() {
-		assertEquals(32, 32);
+//	@Test
+	public void basicTest() throws IOException, CsvValidationException, NumberFormatException {
+		int count = 0;
+		for (int j = 0; j < 1600; j++) {
+			String skierID = String.valueOf(ThreadLocalRandom.current().nextInt(1, 100001));
+			String resortID = String.valueOf(ThreadLocalRandom.current().nextInt(1, 11));
+			String liftID = String.valueOf(ThreadLocalRandom.current().nextInt(1, 41));
+			String seasonID = "2022";
+			String dayID = "1";
+			String time = String.valueOf(ThreadLocalRandom.current().nextInt(1, 361));
+
+			String body = String.format(
+					"{\"resortID\":\"%s\",\"seasonID\":\"%s\",\"dayID\":\"%s\",\"skierID\":\"%s\",\"liftID\":\"%s\",\"time\":\"%s\"}",
+					resortID, seasonID, dayID, skierID, liftID, time);
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+
+			HttpEntity<String> request = new HttpEntity<>(body, headers);
+
+			long requestStartTime = System.currentTimeMillis();
+
+			ResponseEntity<String> response = restTemplate.exchange("http://localhost:8080/api/ski/create",
+					HttpMethod.POST, request, String.class);
+			long requestEndTime = System.currentTimeMillis();
+
+			long latency = requestEndTime - requestStartTime;
+			HttpStatus responseStatus = response.getStatusCode();
+
+			String csvRecord = String.format("%d,POST,%d,%d", requestStartTime, latency, responseStatus.value());
+
+			File csvFile = new File("post-performance.csv");
+			try (FileWriter writer = new FileWriter(csvFile, true)) {
+				writer.write(csvRecord);
+				writer.write(System.lineSeparator());
+			}
+
+			count++;
+		}
+
+		String performanceAnalysis = PerfrmanceAnalysis.main();
+		System.out.println(performanceAnalysis);
 	}
 }
