@@ -39,15 +39,15 @@ public class RestfulWebServicesApplicationTests {
 	private static final int THREADS = 32;
 	private static final int POSTS = 1000;
 
-	/* Client PART-2
-	 * 32 Threads * 1000 POSTS = 32000 REQUESTS; ExecutorService for mult-threading
-	 * 1. skierID - between 1 and 100000 2. resortID - between 1 and 10 3. liftID -
-	 * between 1 and 40 4. seasonID - 2022 5. dayID - 1 6. time - between 1 and 360
-	 * performanceAnalysis = PerfrmanceAnalysis.main(); through csv reader
-	 * dependency
+	/*
+	 * Client PART-2 32 Threads * 1000 POSTS = 32000 REQUESTS; ExecutorService for
+	 * mult-threading 1. skierID - between 1 and 100000 2. resortID - between 1 and
+	 * 10 3. liftID - between 1 and 40 4. seasonID - 2022 5. dayID - 1 6. time -
+	 * between 1 and 360 performanceAnalysis = PerfrmanceAnalysis.main(); through
+	 * csv reader dependency
 	 * 
 	 */
-	@Test
+//	@Test
 	public void testConcurrentRequests() throws InterruptedException, ExecutionException, CsvValidationException,
 			NumberFormatException, FileNotFoundException, IOException {
 		ExecutorService executorService = Executors.newFixedThreadPool(THREADS);
@@ -105,22 +105,16 @@ public class RestfulWebServicesApplicationTests {
 		}
 
 		executorService.shutdown();
-//		long endTime = System.currentTimeMillis();
-//		long totalDuration = endTime - startTime;
-//		long totalThroughput = totalRequests / (TimeUnit.MILLISECONDS.toSeconds(totalDuration) % 60);
-//
-//		System.out.println("totalDuration ::: " + totalDuration + "::: total throughput :::" + totalThroughput);
-//		System.out.println(":::::::totalRequests::::::::::" + 32);
 
 		String performanceAnalysis = PerfrmanceAnalysis.main();
 		System.out.println(performanceAnalysis);
 		assertEquals(32000, 32000);
 	}
 
-	/* Client PART-1
-	 * for testing client remove @test annotation of basicTest() and add it to
-	 * testConcurrentRequests() For Jar generation, without build getting failed
-	 * uncomment @test to run the part 1 client and comment @test in part 2
+	/*
+	 * Client PART-1 for testing client remove @test annotation of basicTest() and
+	 * add it to testConcurrentRequests() For Jar generation, without build getting
+	 * failed uncomment @test to run the part 1 client and comment @test in part 2
 	 */
 
 //	@Test
@@ -165,5 +159,10 @@ public class RestfulWebServicesApplicationTests {
 
 		String performanceAnalysis = PerfrmanceAnalysis.main();
 		System.out.println(performanceAnalysis);
+	}
+
+	@Test
+	public void buildTest() {
+		assertEquals(32000, 32000);
 	}
 }

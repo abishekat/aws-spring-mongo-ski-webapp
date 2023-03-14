@@ -328,7 +328,7 @@ public class SkiController {
 	@Retryable(value = { ResponseStatusException.class }, maxAttempts = 5, backoff = @Backoff(delay = 500))
 	public String performCurl() {
 //		http://localhost:8080/actuator/metrics/http.server.requests?tag=uri:/api/ski/resorts
-		String curlCommand = "curl http://localhost:8080/actuator/metrics/http.server.requests?tag=uri:/api/ski/resorts";
+		String curlCommand = "curl http://concordia.abishekarumugam.com/actuator/metrics/http.server.requests?tag=uri:/api/ski/resorts";
 
 		try {
 			Process process = new ProcessBuilder(curlCommand.split(" ")).start();
