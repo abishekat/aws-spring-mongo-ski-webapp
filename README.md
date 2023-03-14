@@ -2,6 +2,9 @@
 
 [Abishek Arumugam Thiruselvi](https://www.abishekarumugam.com)('40218896')
 
+# Testing the Application
+[TESTING URL](https://app.swaggerhub.com/apis/abishekat/dss-project/1.0)
+
 # Running the Application in Eclipse
 #### Prerequisites: Eclipse IDE plugins Spring Tools 3, Git, Java 17 or greater, Maven 3.9 or higher.
 1. Open Git Perspective in Eclipse and clone this [repository](https://github.com/abishekat/aws-spring-mongo-ski-webapp)
