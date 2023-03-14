@@ -13,7 +13,7 @@ public class Resort {
 	private String resortName;
 
 //	@Column(name="resortid")
-	private int resortId;
+	private String resortId;
 
 	@Override
 	public String toString() {
@@ -28,12 +28,13 @@ public class Resort {
 		this.resortName = resortName;
 	}
 
-	public int getResortId() {
+	public String getResortId() {
 		return resortId;
 	}
 
-	public void setResortId(int resortId) {
+	public void setResortId(String resortId) {
 		this.resortId = resortId;
 	}
+
 
 }
