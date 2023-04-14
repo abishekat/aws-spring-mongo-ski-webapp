@@ -2,6 +2,9 @@
 
 [Abishek Arumugam Thiruselvi](https://www.abishekarumugam.com)('40218896')
 
+# Video Tutorial
+[CICD - TUTORIAL](https://abishekarumugam.s3.amazonaws.com/aws-java-cicd-tutorial/aws-java-tutorial.mp4)
+
 # Testing the Application
 [TESTING URL](https://app.swaggerhub.com/apis/abishekat/dss-project/1.0)
 
